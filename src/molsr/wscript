@@ -1,0 +1,34 @@
+## -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+def build(bld):
+    module = bld.create_ns3_module('molsr', ['internet'])
+    module.includes = '.'
+    module.source = [
+        'model/molsr-header.cc',
+        'model/molsr-state.cc',
+        'model/olsr.cc',
+        'model/molsr-routing-protocol.cc',
+        'helper/molsr-helper.cc',
+        ]
+
+    module_test = bld.create_ns3_module_test_library('olsr')
+    module_test.source = [
+        'test/molsr-test-suite.cc',
+        ]
+
+    headers = bld(features='ns3header')
+    headers.module = 'molsr'
+    headers.source = [
+        'model/olsr.h',
+        'model/molsr-routing-protocol.h',
+        'model/molsr-header.h',
+        'model/molsr-state.h',
+        'model/molsr-repositories.h',
+        'helper/molsr-helper.h',
+        ]
+
+
+    if bld.env['ENABLE_EXAMPLES']:
+        bld.recurse('examples')
+
+    bld.ns3_python_bindings()
